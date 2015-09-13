@@ -1,0 +1,5 @@
+# Git Ignore
+
+# Ignore saved images
+!saved_images/
+saved_images/*.png
