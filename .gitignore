@@ -3,3 +3,6 @@
 # Ignore saved images
 !saved_images/
 saved_images/*.png
+
+# Ignore database config files
+*.cnf
