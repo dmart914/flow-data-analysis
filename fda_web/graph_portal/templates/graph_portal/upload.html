@@ -1,0 +1,40 @@
+{% extends 'graph_portal/base.html' %}
+{% load staticfiles %}
+
+{% block page_title %}Flow Data Analysis - Upload{% endblock %}
+
+{% block content %}
+
+<!-- IMPORTANT: enctype attribute -->
+<form class="dropzone" action="upload.html" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+</form>
+<button id="submit-all">
+    Submit all files
+</button>
+
+<script src="{% static 'graph_portal/dropzone.js' %}"></script>
+<script type="text/javascript">
+    Dropzone.options.myDropzone = {
+        // Prevents Dropzone from uploading dropped files immediately
+        autoProcessQueue : false,
+
+        init : function() {
+            var submitButton = document.querySelector("#submit-all")
+            myDropzone = this;
+
+            submitBUtton.addEventListener("click", function() {
+                myDropzone.processQueue();
+                // Tell Dropzone to process all queued files
+            });
+
+            // Only show submit button when files are dropped there
+            this.on("addedfile", function() {
+                // Show submit button here.
+            });
+        }
+    };
+</script>
+
+
+{% endblock %}
