@@ -1,0 +1,42 @@
+{% extends 'graph_portal/base.html' %}
+
+
+{% block page_title %}Flow Data Analysis - Meter details{% endblock %}
+
+
+{% block content %}
+<h1>Meter details</h1>
+<h3>{{ meter.name }}</h3>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <caption>{{ datapoints|length }} datapoints</caption>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Air temperature</th>
+                <th>Inlet depth</th>
+                <th>Throat depth</th>
+                <th>Submergence</th>
+                <th>Flow rate</th>
+                <th>Accumulated flow</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dp in datapoints %}
+                <tr>
+                    <th scope="row">{{ dp.pk }}</th>
+                    <td>{{ dp.date }}</td>
+                    <td>{{ dp.air_temp }}</td>
+                    <td>{{ dp.inlet_depth }}</td>
+                    <td>{{ dp.throat_depth }}</td>
+                    <td>{{ dp.submergence }}</td>
+                    <td>{{ dp.flow_rate }}</td>
+                    <td>{{ dp.accumulated_flow }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

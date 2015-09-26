@@ -1,0 +1,16 @@
+{% extends 'graph_portal/base.html' %}
+
+
+{% block page_title %}Flow Data Analysis - Select a meter{% endblock %}
+
+
+{% block content %}
+<h1>Select a meter to upload to...</h1>
+{% for meter in meters %}
+    <h3>
+        <a href="{% url 'graph_portal:meter_upload' meter_pk=meter.pk %}">{{ meter.name }}</a>
+    </h3>
+{% endfor %}
+
+{% endblock %}
+

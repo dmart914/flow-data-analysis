@@ -19,5 +19,5 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('graph_portal.urls')),
+    url(r'^', include('graph_portal.urls', namespace='graph_portal')),
 ]

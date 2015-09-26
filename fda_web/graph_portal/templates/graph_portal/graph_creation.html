@@ -1,0 +1,34 @@
+{% extends 'graph_portal/base.html' %}
+
+{% block page_title %}Flow Data Analysis - Graph creation {% endblock %}
+
+{% block content %}
+
+<form method="post" action="{% url 'graph_portal:graph_creation' meter_pk=meter_pk %}">
+    {% csrf_token %}
+    {{ form }}
+    
+    <div class="col-md-12" style="margin-top:20px;text-align:center;">
+        <input type="submit" value="Submit" class="btn btn-lg" style="width:80%;">
+    </div>
+
+</form>
+<!--
+<script>
+    $(function() {
+    $("#from").datepicker({
+        changeMonth: true,
+        onSelect: function(selectedDate) {
+            $("input[name='daterange_from']").val(selectedDate);
+        }
+    });
+    $("#to").datepicker({
+        changeMonth: true,
+        onSelect: function(selectedDate) {
+            $("input[name='daterange_to']").val(selectedDate);
+        }
+    });
+});
+</script>
+-->
+{% endblock %}

@@ -3,15 +3,31 @@
 
 {% block page_title %}Flow Data Analysis - Upload{% endblock %}
 
+
+{% block additional_scripts %}
+<link rel="stylesheet" type="text/css" href="{% static 'graph_portal/dropzone.css' %}">
+{% endblock %}
+
+
 {% block content %}
 
 <!-- IMPORTANT: enctype attribute -->
-<form class="dropzone" action="upload.html" method="post" enctype="multipart/form-data">
+<form class="dropzone" id="myDropzone" action="{% url 'graph_portal:meter_upload' meter_pk=meter_pk %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 </form>
-<button id="submit-all">
+
+<br />
+
+<button id="submit-all" type="button" class="btn">
     Submit all files
 </button>
+
+<br />
+
+<div id="upload-log" class="col-md-12">
+    <h3>Upload log:</h3>
+    <ul> </ul>
+</div>
 
 <script src="{% static 'graph_portal/dropzone.js' %}"></script>
 <script type="text/javascript">
@@ -23,7 +39,7 @@
             var submitButton = document.querySelector("#submit-all")
             myDropzone = this;
 
-            submitBUtton.addEventListener("click", function() {
+            submitButton.addEventListener("click", function() {
                 myDropzone.processQueue();
                 // Tell Dropzone to process all queued files
             });
@@ -32,6 +48,13 @@
             this.on("addedfile", function() {
                 // Show submit button here.
             });
+            
+            // Get server response for success and failure
+            this.on("success", function(file, response) {
+                var content = "<li>" + file.name + ' - ' + response + "</li>";
+                $('#upload-log ul').append(content);
+            });
+
         }
     };
 </script>

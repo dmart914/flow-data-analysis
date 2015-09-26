@@ -15,12 +15,26 @@ class FlowMeter(models.Model):
 
 
 class DataPointCreator(models.Manager):
-    def create_datapoint(self, line):
+    def create_datapoint(self, line, target_pk=DEFAULT_PK):
         line_arr = line.split(',')
+
+        if len(line_arr) != 8:
+            raise AssertionError('Wrong number of columns')
+
         west_tz = pytz.timezone('America/Los_Angeles')
         naive_date = datetime.strptime(line_arr[1], ' %m/%d/%Y %H:%M:%S')
         aware_date = naive_date.replace(tzinfo=west_tz)
+
+        # Check for duplicate datapoint
+        # Note: this will reject any datapoint of any matching datetime.
+        # This model should be refactored so it gets a pk of the flow_meter
+        # it belongs to.
+        # Conditional will be:
+        if len(DataPoint.objects.filter(date=aware_date).filter(flow_meter=FlowMeter.objects.get(pk=target_pk))) > 0:
+            raise FileExistsError('Record already exists')
+
         dp = self.create(
+            flow_meter = FlowMeter.objects.get(pk=target_pk),
             date=aware_date,
             air_temp=float(line_arr[2]),
             inlet_depth=float(line_arr[3]),
@@ -29,6 +43,7 @@ class DataPointCreator(models.Manager):
             flow_rate=float(line_arr[6]),
             accumulated_flow=float(line_arr[7])
         )
+
         return dp
 
 
@@ -51,11 +66,18 @@ class DataPoint(models.Model):
 class UploadFile(models.Model):
     ''' Reference: https://amatellanes.wordpress.com/2013/11/05/dropzonejs-django-how-to-build-a-file-upload-form/
     '''
-    file = models.FileField(upload_to='files')
+    file = models.FileField(upload_to='/home/pi/flow-data-analysis/files')
 
+    def file_delete(self):
+        import os
+        os.remove(str(self.file))
 
 class UploadFileForm(forms.ModelForm):
-
     class Meta:
         model = UploadFile
         fields = ['file']
+
+class DateRangeForm(forms.Form):
+    daterangemeter_pk = forms.ModelChoiceField(queryset=FlowMeter.objects.all(), label='Meter')
+    daterange_from = forms.DateTimeField(label='Start date and time')
+    daterange_to = forms.DateTimeField(label='End date and time')
