@@ -8,7 +8,22 @@ import pytz
 DEFAULT_PK = 1
 
 class FlowMeter(models.Model):
+    ''' A meter that measures water '''
+
     name = models.CharField(max_length=240)
+    meter_type = models.CharField(max_length=240, default="Unset Type")
+    
+    # Location info
+    gps_x = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    gps_y = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    addr_number = models.IntegerField(null=True, blank=True)
+    addr_street1 = models.CharField(max_length=240, null=True, blank=True)
+    addr_street2 = models.CharField(max_length=240, null=True, blank=True)
+    addr_city = models.CharField(max_length=240, null=True, blank=True)
+    addr_state = models.CharField(max_length=30, null=True, blank=True)
+    addr_country = models.CharField(max_length=240, null=True, blank=True)
+
+    last_service = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.name
