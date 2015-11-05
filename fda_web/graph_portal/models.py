@@ -29,6 +29,12 @@ class FlowMeter(models.Model):
         return self.name
 
 
+class FlowMeterForm(forms.ModelForm):
+    class Meta:
+        model = FlowMeter
+        fields = ['name','meter_type','gps_x','gps_y','addr_number','addr_street1','addr_street2','addr_city','addr_state','addr_country','last_service']
+
+
 class DataPointCreator(models.Manager):
     def create_datapoint(self, line, target_pk=DEFAULT_PK):
         line_arr = line.split(',')
@@ -81,7 +87,10 @@ class DataPoint(models.Model):
 class UploadFile(models.Model):
     ''' Reference: https://amatellanes.wordpress.com/2013/11/05/dropzonejs-django-how-to-build-a-file-upload-form/
     '''
-    file = models.FileField(upload_to='/home/pi/flow-data-analysis/files')
+
+    from django.conf import settings
+    rel_path = settings.BASE_DIR
+    file = models.FileField(upload_to= rel_path + '/files')
 
     def file_delete(self):
         import os

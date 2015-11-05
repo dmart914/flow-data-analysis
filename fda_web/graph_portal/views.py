@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -12,6 +12,35 @@ def meter_detail(request, meter_pk):
     meter = FlowMeter.objects.get(pk=meter_pk)
     dps = meter.datapoint_set.all()
     return render(request, 'graph_portal/meter_detail.html', {'meter':meter, 'datapoints':dps})
+
+
+def meter_create(request):
+    if request.method == "POST":
+        new_meter_form = FlowMeterForm(request.POST)
+
+        if new_meter_form.is_valid():
+            new_meter = new_meter_form.save()
+            return redirect('graph_portal:meter_detail', meter_pk=new_meter.pk)
+
+    else:
+        new_meter_form = FlowMeterForm()
+
+    return render(request, 'graph_portal/meter_create.html', {'new_meter_form' : new_meter_form})
+
+
+def meter_edit(request, meter_pk):
+    # Change this in to a get or 404
+    meter = FlowMeter.objects.get(pk=meter_pk)
+    
+    if request.method == "POST":
+        updated_meter = FlowMeterForm(request.POST, instance=meter) 
+        updated_meter.save()
+        return redirect('graph_portal:meter_detail', meter_pk = meter.pk)
+
+    else:
+        form = FlowMeterForm(instance=meter)
+
+    return render(request, 'graph_portal/meter_edit.html', {'meter': meter, 'form': form})
 
 
 def flow_meter_upload(request):

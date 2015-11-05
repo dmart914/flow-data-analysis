@@ -1,0 +1,18 @@
+{% extends "graph_portal/base.html" %}
+
+{% block page_title %}Flow Data Analysis - Create a new flow meter{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+<h1>Create a new flow meter...</h1>
+<form action="{% url 'graph_portal:meter_create' %}" method="POST">
+    {% csrf_token %}
+    {{ new_meter_form|crispy }}
+
+    <input type="submit" value="Submit" class="btn btn-primary" />
+
+</form>
+
+{% endblock %}
+
