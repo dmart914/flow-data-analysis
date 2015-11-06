@@ -1,12 +1,44 @@
 {% extends 'graph_portal/base.html' %}
 
-
 {% block page_title %}Flow Data Analysis - Meter details{% endblock %}
 
 
 {% block content %}
 <h1>Meter details</h1>
-<h3>{{ meter.name }}</h3>
+<div class="row">
+    <div class="col-md-6">
+        <h3>{{ meter.name }}</h3>
+    </div>
+    <div class="col-md-6">
+        <p class="text-right">
+            <a href="{% url 'graph_portal:meter_edit' meter_pk=meter.pk %}" class="btn btn-primary btn-lg">Edit</a>
+
+            <button type="button" class="btn btn-danger btn-lg">Delete</button>
+        </p>    
+        
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <strong>Name:</strong> {{ meter.name }}
+    </div>
+    <div class="col-md-3">
+        <strong>gps_x:</strong> {{ meter.gps_x }}
+    </div>
+    <div class="col-md-3">
+        <strong>gps_y:</strong> {{ meter.gps_y }}
+    </div>
+    <div class="col-md-3">
+        <strong>addr_number:</strong> {{ meter.addr_number }} {{ meter.addr_street1 }} {{ meter.addr_street2 }}<br>
+        {{ meter.addr_city }}, {{ meter.addr_state }}<br>
+        {{ meter.addr_country }}
+    </div>
+    <div class="col-md-3">
+        <strong>last_service:</strong> {{ meter.last_service }}
+    </div>
+</div>
+
+<!-- need more info about meter here -->
 <div class="table-responsive">
     <table class="table table-hover">
         <caption>{{ datapoints|length }} datapoints</caption>
@@ -39,25 +71,25 @@
     </table>
 </div>
 
-<div class="pagination">
-    <span class="step-links">
-        {% if datapoints.has_previous %}
-            <a href="?page={{ datapoints.previous_page_number }}">previous</a>
-        {% endif %}
 
-        <span class="current">
-            Page {{ datapoints.number }} of {{ datapoints.paginator.num_pages }}.
-        </span>
 
-        {% if datapoints.has_next %}
-            <a href="?page={{ datapoints.next_page_number }}">next</a>
-        {% endif %}
-    </span> 
-</div>
 
 <ul class="pagination">
-    {% for n in (datapoints.number )}
 
+    {% if datapoints.has_previous %}
+        <li>
+            <a href="?page={{ datapoints.previous_page_number }}">{{ datapoints.previous_page_number }}</a>
+        </li>
+    {% endif %}
 
+    <li class="active">
+        <a href="?page={{ datapoints.number }}">{{ datapoints.number }}</a>
+    </li>
+        
+    {% if datapoints.has_next %}
+        <li>
+            <a href="?page={{ datapoints.next_page_number }}">{{ datapoints.next_page_number }}</a>
+        </li>
+    {% endif %}
 </ul>
 {% endblock %}

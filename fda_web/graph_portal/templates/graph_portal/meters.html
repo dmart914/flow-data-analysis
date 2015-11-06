@@ -8,7 +8,7 @@
 <h1>Select a meter to upload to...</h1>
 {% for meter in meters %}
     <h3>
-        <a href="{% url 'graph_portal:meter_upload' meter_pk=meter.pk %}">{{ meter.name }}</a>
+        <a href="{% url 'graph_portal:meter_detail' meter_pk=meter.pk %}">{{ meter.name }}</a>
     </h3>
 {% endfor %}
 
