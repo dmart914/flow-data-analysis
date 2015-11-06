@@ -2,6 +2,7 @@ from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 
 def index(request):
@@ -11,7 +12,17 @@ def index(request):
 def meter_detail(request, meter_pk):
     meter = FlowMeter.objects.get(pk=meter_pk)
     dps = meter.datapoint_set.all()
-    return render(request, 'graph_portal/meter_detail.html', {'meter':meter, 'datapoints':dps})
+    paginator = Paginator(dps, 100)
+
+    page = request.GET.get('page')
+    try:
+        datapoints = paginator.page(page)
+    except PageNotAnInteger:
+        datapoints = paginator.page(1)
+    except EmptyPage:
+        datapoints = paginator.page(paginator.num_pages)
+
+    return render_to_response('graph_portal/meter_detail.html', {'meter':meter, 'datapoints':datapoints})
 
 
 def meter_create(request):

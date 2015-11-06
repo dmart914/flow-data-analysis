@@ -39,4 +39,25 @@
     </table>
 </div>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if datapoints.has_previous %}
+            <a href="?page={{ datapoints.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ datapoints.number }} of {{ datapoints.paginator.num_pages }}.
+        </span>
+
+        {% if datapoints.has_next %}
+            <a href="?page={{ datapoints.next_page_number }}">next</a>
+        {% endif %}
+    </span> 
+</div>
+
+<ul class="pagination">
+    {% for n in (datapoints.number )}
+
+
+</ul>
 {% endblock %}
