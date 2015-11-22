@@ -12,6 +12,7 @@ def index(request):
 def meter_detail(request, meter_pk):
     meter = FlowMeter.objects.get(pk=meter_pk)
     dps = meter.datapoint_set.all()
+    dps_count = dps.count()
     paginator = Paginator(dps, 100)
 
     page = request.GET.get('page')
@@ -22,7 +23,11 @@ def meter_detail(request, meter_pk):
     except EmptyPage:
         datapoints = paginator.page(paginator.num_pages)
 
-    return render_to_response('graph_portal/meter_detail.html', {'meter':meter, 'datapoints':datapoints})
+    return render_to_response('graph_portal/meter_detail.html', {
+        'meter':meter, 
+        'datapoints':datapoints,
+        'datapoints_count':dps_count,
+    })
 
 
 def meter_create(request):

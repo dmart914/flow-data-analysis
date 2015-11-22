@@ -23,25 +23,41 @@
         <strong>Name:</strong> {{ meter.name }}
     </div>
     <div class="col-md-3">
-        <strong>gps_x:</strong> {{ meter.gps_x }}
+        <strong>GPS Loc.:</strong> 
+        {% if meter.gps_x %} 
+            {{ meter.gps_x }}, {{ meter.gps_y }}
+        {% else %}
+            Not set
+        {% endif %}
     </div>
     <div class="col-md-3">
-        <strong>gps_y:</strong> {{ meter.gps_y }}
+        <strong>Address:</strong> 
+        {% if meter.addr_number %}
+            {{ meter.addr_number }} {{ meter.addr_street1 }} {{ meter.addr_street2 }}<br>
+        {% else %}
+            No street set <br>
+        {% endif %}
+
+        {% if meter.addr_city %}   
+            {{ meter.addr_city }}{% if meter.addr_state %}, {{ meter.addr_state }}{% endif %}<br>
+        {% else %}
+            No city set<br>
+        {% endif %}
+        
+        {% if meter.addr_country %}
+            {{ meter.addr_country }}<br>
+        {% endif %}
+
     </div>
     <div class="col-md-3">
-        <strong>addr_number:</strong> {{ meter.addr_number }} {{ meter.addr_street1 }} {{ meter.addr_street2 }}<br>
-        {{ meter.addr_city }}, {{ meter.addr_state }}<br>
-        {{ meter.addr_country }}
-    </div>
-    <div class="col-md-3">
-        <strong>last_service:</strong> {{ meter.last_service }}
+        <strong>Last service:</strong> {{ meter.last_service }}
     </div>
 </div>
 
 <!-- need more info about meter here -->
 <div class="table-responsive">
     <table class="table table-hover">
-        <caption>{{ datapoints|length }} datapoints</caption>
+        <caption>{{ datapoints_count }} datapoints</caption>
         <thead>
             <tr>
                 <th>ID</th>
