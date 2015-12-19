@@ -108,3 +108,10 @@ STATIC_URL = '/static/'
 
 # Crispy Forms Templates
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+# Form overrides for Bootstrap
+# MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}

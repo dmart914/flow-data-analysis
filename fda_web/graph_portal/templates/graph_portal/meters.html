@@ -5,10 +5,10 @@
 
 
 {% block content %}
-<h1>Select a meter to upload to...</h1>
+<h1>Flow Meters</h1>
 {% for meter in meters %}
     <h3>
-        <a href="{% url 'graph_portal:meter_detail' meter_pk=meter.pk %}">{{ meter.name }}</a>
+        <a href="{% url 'graph_portal:meter_detail' meter_pk=meter.pk %}">{{ meter.name }}</a> - {{ meter.meter_type }}
     </h3>
 {% endfor %}
 

@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 from .models import *
 
 def index(request):
@@ -49,14 +50,20 @@ def meter_edit(request, meter_pk):
     meter = FlowMeter.objects.get(pk=meter_pk)
     
     if request.method == "POST":
-        updated_meter = FlowMeterForm(request.POST, instance=meter) 
-        updated_meter.save()
-        return redirect('graph_portal:meter_detail', meter_pk = meter.pk)
+        meter_form = FlowMeterForm(request.POST, instance=meter) 
+
+        if meter_form.is_valid():            
+            meter_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Meter edited')
+            return redirect('graph_portal:meter_detail', meter_pk = meter.pk)
+
+        else:
+            messages.add_message(request, messages.ERROR, 'There was a problem with your edits')
 
     else:
-        form = FlowMeterForm(instance=meter)
+        meter_form = FlowMeterForm(instance=meter)
 
-    return render(request, 'graph_portal/meter_edit.html', {'meter': meter, 'form': form})
+    return render(request, 'graph_portal/meter_edit.html', {'meter': meter, 'form': meter_form})
 
 
 def flow_meter_upload(request):

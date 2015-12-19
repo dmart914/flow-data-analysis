@@ -12,6 +12,7 @@
     <div class="col-md-6">
         <p class="text-right">
             <a href="{% url 'graph_portal:meter_edit' meter_pk=meter.pk %}" class="btn btn-primary btn-lg">Edit</a>
+            <a href="{% url 'graph_portal:meter_upload' meter_pk=meter.pk %}" class="btn btn-success btn-lg">Upload data</a>
 
             <button type="button" class="btn btn-danger btn-lg">Delete</button>
         </p>    
